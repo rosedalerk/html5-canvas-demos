@@ -1,0 +1,160 @@
+<html>
+  <body>
+    <canvas width="200" height="200" style="width: 500px; height: 500px; image-rendering: pixelated;"></canvas>
+    <script>
+      const canvas = document.querySelector('canvas');
+      const context = canvas.getContext('2d');
+
+
+      // Set the canvas dimensions to the device pixel ratio
+      canvas.width = canvas.offsetWidth * window.devicePixelRatio;
+      canvas.height = canvas.offsetHeight * window.devicePixelRatio;
+
+      // Scale the canvas down to the original size
+      context.scale(1 / window.devicePixelRatio, 1 / window.devicePixelRatio);
+
+
+      //For FPS counter
+      let fps = 0;
+      let startTime = performance.now();
+      let frameCount = 0;
+      const FPS_WINDOW_SIZE = 0.5; // Average FPS over the last 0.5 seconds
+
+
+      function updateFPS() {
+        // Calculate the FPS using a sliding window
+        const elapsedTime = performance.now() - startTime;
+        frameCount++;
+        fps = frameCount / (elapsedTime / 1000);
+        if (elapsedTime > FPS_WINDOW_SIZE * 1000) {
+          startTime = performance.now();
+          frameCount = 0;
+        }
+      }
+
+
+
+      // Set the line width and stroke style
+      context.lineWidth = 1;
+      context.strokeStyle = 'black';
+
+      // Initialize variables for the sine function
+      var t = 0;
+      var amplitude = 50;
+      var frequency = 0.3;
+
+
+      function clearAndResizeCanvas() {
+        // Clear the canvas
+        context.clearRect(0, 0, canvas.width, canvas.height);
+
+        // // Calculate the new width and height of the canvas
+        // var newWidth = 300 + amplitude * Math.sin(frequency * t);
+        // var newHeight = 150 + amplitude * Math.cos(frequency * t);
+
+        // // Resize the canvas
+        // canvas.width = newWidth;
+        // canvas.height = newHeight;
+      }
+
+      function drawElements() {
+        clearAndResizeCanvas(); // Clear and resize the canvas before drawing the elements
+
+        // Draw the border
+        context.strokeRect(0, 0, canvas.width, canvas.height);
+
+        // Calculate the center of the canvas
+        var centerX = canvas.width / 2;
+        var centerY = canvas.height / 2;
+
+        // Draw the rectangle
+        context.beginPath();
+        context.rect(centerX - 75, centerY - 50, 150, 100);
+        context.fillStyle = 'red';
+        context.fill();
+
+        // Get the current time
+        var currentTime = new Date();
+
+        // Format the time as a string
+        var timeString = currentTime.toLocaleTimeString();
+
+        // Set the font and text color for the time string
+        context.font = '28px Arial';
+        context.fillStyle = 'black';
+
+        // Measure the width of the time string
+        var timeStringWidth = context.measureText(timeString).width;
+
+        // Measure the width of the FPS text
+        let fpsText = fps.toFixed(1) + ' FPS';
+        let fpsTextWidth = context.measureText(fpsText).width;
+
+        // Draw the time text and FPS text
+        context.fillText(timeString, canvas.width - timeStringWidth - 10, 20);
+        context.fillText(fpsText, canvas.width - fpsTextWidth - 10, 40);
+
+
+
+        drawXArrow();
+        drawYArrow();
+      }
+
+
+      function drawXArrow() {
+        // Draw the horizontal line with arrows at both ends
+        context.beginPath();
+        context.moveTo(0, canvas.height - 20); // Change starting position of horizontal line
+        context.lineTo(canvas.width, canvas.height - 20); // Change ending position of horizontal line
+        context.moveTo(5, canvas.height - 15); // Adjust position of left arrow
+        context.lineTo(0, canvas.height - 20); // Adjust position of left arrow
+        context.lineTo(5, canvas.height - 25); // Adjust position of left arrow
+        context.moveTo(canvas.width - 5, canvas.height - 15); // Adjust position of right arrow
+        context.lineTo(canvas.width, canvas.height - 20); // Adjust position of right arrow
+        context.lineTo(canvas.width - 5, canvas.height - 25); // Adjust position of right arrow
+        context.stroke();
+
+        // Draw the number showing the current canvas width
+        context.font = '28px Arial';
+        context.fillStyle = 'black';
+        context.textAlign = 'right';
+        context.fillText(canvas.width, canvas.width - 30, canvas.height - 20); // Adjust position of canvas width number
+      }
+
+
+      function drawYArrow() {
+        // Draw the vertical line with arrows at both ends
+        context.beginPath();
+        context.moveTo(20, 0);
+        context.lineTo(20, canvas.height);
+        context.moveTo(15, 5);
+        context.lineTo(20, 0);
+        context.lineTo(25, 5);
+        context.moveTo(15, canvas.height - 5);
+        context.lineTo(20, canvas.height);
+        context.lineTo(25, canvas.height - 5);
+        context.stroke();
+
+        // Draw the number showing the current canvas height
+        context.font = '28px Arial';
+        context.fillStyle = 'black';
+        context.textAlign = 'left';
+        context.fillText(canvas.height, 30, canvas.height / 2); // Adjust position of canvas height number
+      }
+
+      function animate() {
+        // Increment the value of t
+        t += 0.05;
+
+        // Redraw the elements on the canvas
+        drawElements();
+        updateFPS();
+        // Request the next frame
+        requestAnimationFrame(animate);
+      }
+
+      // Start the animation loop
+      requestAnimationFrame(animate);
+    </script>
+  </body>
+</html>

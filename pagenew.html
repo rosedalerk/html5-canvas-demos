@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    canvas {
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    // Set the canvas dimensions to match the window size
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+
+    const width = canvas.width;
+    const height = canvas.height;
+
+    // Set the canvas to be HiDPI
+    const devicePixelRatio = window.devicePixelRatio || 1;
+    canvas.width = width * devicePixelRatio;
+    canvas.height = height * devicePixelRatio;
+    ctx.scale(devicePixelRatio, devicePixelRatio);
+
+    // Set the canvas background color to black
+    ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, width, height);
+
+    // Create a rainbow gradient
+    const gradient = ctx.createLinearGradient(0, 0, width, 0);
+    gradient.addColorStop(0, 'red');
+    gradient.addColorStop(1 / 6, 'orange');
+    gradient.addColorStop(2 / 6, 'yellow');
+    gradient.addColorStop(3 / 6, 'green');
+    gradient.addColorStop(4 / 6, 'blue');
+    gradient.addColorStop(5 / 6, 'indigo');
+    gradient.addColorStop(1, 'violet');
+
+    // Draw a spinning rainbow triangle
+    let angle = 0;
+    function draw() {
+      ctx.clearRect(0, 0, width, height); // Clear the canvas
+
+
+    // Set the canvas background color to black
+    ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, width, height);
+
+    // Draw a red square
+    ctx.fillStyle = 'red';
+    ctx.fillRect(50, 50, 100, 100);
+
+
+
+      ctx.save();
+      ctx.translate(width / 2, height / 2);
+      ctx.rotate(angle);
+      ctx.translate(-width / 2, -height / 2);
+
+      // Draw the smaller triangle
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.moveTo(width / 2, height / 2);
+      ctx.lineTo(width / 2 - 50, height / 2 - 50);
+      ctx.lineTo(width / 2 + 50, height / 2 - 50);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.restore();
+      angle += 0.01;
+      requestAnimationFrame(draw);
+    }
+    draw();
+  </script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Animated Pattern</title>
+  </head>
+  <body>
+    <canvas id="pattern-canvas" width="500" height="500"></canvas>
+    <script>
+      // get reference to canvas element
+      var canvas = document.getElementById("pattern-canvas");
+      // get reference to canvas context
+      var ctx = canvas.getContext("2d");
+
+      // define variables for our pattern
+      var x = 0;
+      var y = 0;
+      var size = 50;
+      var speed = 5;
+      var direction = 1;
+      var colors = ["red", "orange", "yellow", "green", "blue", "indigo", "violet"];
+      var colorIndex = 0;
+
+      // define a function to draw our pattern
+      function drawPattern() {
+        // clear the canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // draw a chaotic and mind-bending pattern
+        for (var i = 0; i < 10; i++) {
+          ctx.beginPath();
+          ctx.fillStyle = colors[colorIndex];
+          ctx.arc(x, y, size, 0, 2 * Math.PI);
+          ctx.fill();
+          ctx.closePath();
+          x += size / 2;
+          y += size / 2;
+          size += 5;
+          colorIndex = (colorIndex + 1) % colors.length;
+        }
+
+        // update the position and size of the pattern
+        x += speed * direction;
+        if (x + size > canvas.width || x < 0) {
+          direction *= -1;
+        }
+      }
+
+      // animate the pattern by calling the draw function repeatedly
+      setInterval(drawPattern, 50);
+    </script>
+  </body>
+</html>

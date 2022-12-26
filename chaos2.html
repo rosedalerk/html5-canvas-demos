@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Experience Defying Logic and Reason</title>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+  <script>
+    // Get a reference to the canvas element
+    var canvas = document.getElementById("canvas");
+    // Set the canvas to the full width and height of the window
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    // Get a reference to the canvas context, which we will use to draw on the canvas
+    var ctx = canvas.getContext("2d");
+
+    // Define some variables to control the animation
+    var shapes = []; // An array to hold the shapes that will be drawn on the canvas
+    var numShapes = 50; // The number of shapes to create
+    var minSize = 10; // The minimum size for a shape
+    var maxSize = 100; // The maximum size for a shape
+    var minSpeed = 1; // The minimum speed for a shape
+    var maxSpeed = 10; // The maximum speed for a shape
+    var flashInterval = 100; // The interval at which the shapes will flash (in milliseconds)
+
+    // Create a random number generator function
+    function random(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    // Create a Shape constructor function
+    function Shape(x, y, size, color) {
+      this.x = x;
+      this.y = y;
+      this.size = size;
+      this.color = color;
+      this.speed = random(minSpeed, maxSpeed);
+    }
+
+    // Add a method to the Shape prototype to draw the shape on the canvas
+    Shape.prototype.draw = function() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
+      ctx.fillStyle = this.color;
+      ctx.fill();
+    };
+
+    // Add a method to the Shape prototype to update the shape's position on the canvas
+    Shape.prototype.update = function() {
+      this.x += this.speed;
+      if (this.x > canvas.width + this.size) {
+        this.x = -this.size;
+      }
+    };
+
+    // Create the shapes and add them to the shapes array
+    for (var i = 0; i < numShapes; i++) {
+      var x = random(0, canvas.width);
+      var y = random(0, canvas.height);
+      var size = random(minSize, maxSize);
+      var color = '#'+Math.floor(Math.random()*16777215).toString(16); // Generate a random color
+      var shape = new Shape(x, y, size, color);
+      shapes.push(shape);
+    }
+
+    // The animation loop
+    function animate() {
+      // Clear the canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Draw and update the position of each shape
+      for (var i = 0; i < shapes.length; i++) {
+        var shape = shapes[i];
+        shape.draw();
+        shape.update();
+      }
+
+      // Request the browser to call the animate function again on the next frame
+      requestAnimationFrame(animate);
+    }
+
+    // Set a timer to change the color of the shapes at the specified interval
+    setInterval(function() {
+      for (var i = 0; i < shapes.length; i++) {
+        var shape = shapes[i];
+        shape.color = '#'+Math.floor(Math.random()*16777215).toString(16); // Generate a random color
+      }
+    }, flashInterval);
+
+    // Start the animation loop
+    animate();
+  </script>
+</body>
+</html>
