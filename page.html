@@ -1,17 +1,30 @@
 <html>
   <body>
-    <canvas width="200" height="200" style="width: 500px; height: 500px; image-rendering: pixelated;"></canvas>
+    <canvas width="400" height="400" style="width: 800px; height: 800px;"></canvas>
     <script>
       const canvas = document.querySelector('canvas');
       const context = canvas.getContext('2d');
 
 
-      // Set the canvas dimensions to the device pixel ratio
-      canvas.width = canvas.offsetWidth * window.devicePixelRatio;
-      canvas.height = canvas.offsetHeight * window.devicePixelRatio;
+    // set the canvas to be the same size as the window
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
-      // Scale the canvas down to the original size
-      context.scale(1 / window.devicePixelRatio, 1 / window.devicePixelRatio);
+    // resize the canvas whenever the window is resized
+    window.addEventListener('resize', function() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+
+
+    
+
+      // // Set the canvas dimensions to the device pixel ratio
+      // canvas.width = canvas.offsetWidth * window.devicePixelRatio;
+      // canvas.height = canvas.offsetHeight * window.devicePixelRatio;
+
+      // // Scale the canvas down to the original size
+      // context.scale(1 / window.devicePixelRatio, 1 / window.devicePixelRatio);
 
 
       //For FPS counter
